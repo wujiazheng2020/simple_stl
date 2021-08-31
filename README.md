@@ -1,5 +1,5 @@
 # simple stl
-*this lib simplify the achievement detail of comman container, but add the container variety*, the whole code partily follow Google Style. </br>
+*this lib simplify the achievement detail of common container, but add the container variety*, the whole code partily follow Google Style. </br>
 Email: wujiazheng2020@gmail.com</br>
 Notice: it follows the MIT license, it can use it almost anyway for free.
 ## why i do this?
