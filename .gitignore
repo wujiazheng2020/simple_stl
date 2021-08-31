@@ -1,0 +1,5 @@
+build/
+coverage/
+.vscode/
+.VSCodeCounter/
+see_coverage.sh
