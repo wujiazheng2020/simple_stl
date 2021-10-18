@@ -1,15 +1,15 @@
 # simple stl
-*this lib simplify the achievement detail of common container, but add the container variety*, the whole code partily follow Google Style. </br>
+*this lib simplifies the achievement details of common container, but add the container variety*, the whole code partily follow the Google Style. </br>
 Email: wujiazheng2020@gmail.com</br>
-Notice: it follows the MIT license, it can use it almost anyway for free.
+Notice: it follows the MIT license, you can use it almost anyway for free.
 ## why i do this?
-i do this mainly for challengle, in fact, i finish it in 96 hours with 10800 code-lines, so, i feel very happy, the other reason is i want to prepare for a more interesting project, it may need some data structure.
+i do this mainly for challenge, in fact, I finished it in 96 hours with 10800 code-lines, it made me very happy, the other reason is i want to prepare for a more interesting project, it may need some data structure.
 ## Code Structure
 container <- algorithm <- application </br>
-so, container is just at the bottom, it is quite simple
+so, container is just at the bottom, it's quite simple
 ## Acknowledge
-when i wrote this code , i refer to the DSA book of dengjunhui and << algorithm introduction >>, but I basically changed it completely, including the achievement and encapsulation, to make it easier to be used by engineering code. especially in the part of the tree</br>
-i use std::vector just for produce prime_table and fibonacci table in complie time, because i love std::vector in that case
+when i wrote this code , i refer to the DSA book of dengjunhui and << algorithm introduction >>, but I basically changed it completely, including the achievement and encapsulation, to make it easier to be used by engineering code. especially in the part of the "tree"</br>
+i use std::vector just for produce prime_table and fibonacci table in complie time, because i think it's a good achievement
 ## Content
 ### 1.Container
 * auxiliary_space
