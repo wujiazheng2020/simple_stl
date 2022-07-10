@@ -10,6 +10,7 @@
 
 #include <glog/logging.h>
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "simple_stl/container/left_heap/left_heap.h"
 #include "simple_stl/container/priority_queue/priority_queue.h"

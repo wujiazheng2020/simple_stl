@@ -14,14 +14,14 @@ include_directories(
 )
 
 # fetch gtest
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e # release-1.10.0
-)
-FetchContent_MakeAvailable(googletest)
-include(GoogleTest)
+# include(FetchContent)
+# FetchContent_Declare(
+#   googletest
+#   GIT_REPOSITORY https://github.com/google/googletest.git
+#   GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e # release-1.10.0
+# )
+# FetchContent_MakeAvailable(googletest)
+find_package(GTest REQUIRED)
 
 # function construct
 enable_testing()
@@ -31,7 +31,7 @@ function(AddTest dir_path)
   foreach(ABS_PATH ${SRCS})
     get_filename_component(EXE_NAME ${ABS_PATH} NAME_WE)
     add_executable(${EXE_NAME} ${ABS_PATH})
-    target_link_libraries(${EXE_NAME} gtest_main glog::glog)
+    target_link_libraries(${EXE_NAME} gtest_main glog::glog gtest)
     gtest_discover_tests(${EXE_NAME})
   endforeach()
 endfunction(AddTest)

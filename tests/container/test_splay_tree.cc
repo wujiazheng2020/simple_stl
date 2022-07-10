@@ -10,6 +10,7 @@
 
 #include <glog/logging.h>
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "simple_stl/algorithm/binary_tree_algorithm/traverse/inorder_traverse/inorder_traverser_common.h"
 #include "simple_stl/algorithm/binary_tree_algorithm/traverse/preorder_traverse/preorder_traverser_common.h"
@@ -100,11 +101,11 @@ TEST(TEST_SPLAY_TREE, TEST_SPLAY_TREE_BASIC) {
 
   sstl::SplayTree<int> splay_tree2;
   for (int i = 0; i < 200; ++i) {
-    splay_tree2.Insert(floor(1e5 * sin(i * 123 - 59 * i * i + 20 * i * i * i)));
+    splay_tree2.Insert(floor(1e5 * std::sin(i * 123 - 59 * i * i + 20 * i * i * i)));
   }
   EXPECT_EQ(splay_tree2.Size(), 200);
   for (int i = 0; i < 180; ++i) {
-    splay_tree2.Remove(floor(1e5 * sin(i * 123 - 59 * i * i + 20 * i * i * i)));
+    splay_tree2.Remove(floor(1e5 * std::sin(i * 123 - 59 * i * i + 20 * i * i * i)));
   }
   EXPECT_EQ(splay_tree2.Size(), 20);
 }
