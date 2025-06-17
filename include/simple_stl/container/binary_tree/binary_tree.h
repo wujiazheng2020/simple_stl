@@ -19,6 +19,7 @@ class BinaryTree {
  public:
   BinaryTree() : size_(0), root_(nullptr) {}
   virtual ~BinaryTree() {
+    RemoveAt(root_);
     size_ = 0;
     root_ = nullptr;
   }
