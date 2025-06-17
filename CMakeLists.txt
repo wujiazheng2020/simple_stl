@@ -1,13 +1,16 @@
-cmake_minimum_required(VERSION 3.21.1)
+cmake_minimum_required(VERSION 3.16)
 project(simple_stl)
 
-SET(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
-SET(CMAKE_C_FLAGS "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage")
+# SET(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+# SET(CMAKE_C_FLAGS "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage")
+
+SET(CMAKE_CXX_FLAGS "-O3 -Wall -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "-O3 -Wall -W -fprofile-arcs -ftest-coverage")
 SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
 
 add_compile_options(-std=c++11)
 
-find_package (glog 0.6.0 REQUIRED)
+find_package (glog REQUIRED)
 
 include_directories(
   include
