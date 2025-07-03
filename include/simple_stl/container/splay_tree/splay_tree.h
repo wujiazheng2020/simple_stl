@@ -135,8 +135,7 @@ class SplayTree : public BinarySearchTree<DataType> {
   // serialize the tree to output stream
   void Serialize(std::ostream& os) const {
     SerializeNode(this->Root(), os);
-    int sz = this->Size();
-    os.write(reinterpret_cast<const char*>(&sz), sizeof(sz));
+    os << this->Size() << " ";
   }
 
   // deserialize the tree from input stream
@@ -145,7 +144,7 @@ class SplayTree : public BinarySearchTree<DataType> {
     auto* root = DeserializeNode(is);
     tree->SetRoot(root);
     int sz;
-    is.read(reinterpret_cast<char*>(&sz), sizeof(sz));
+    is >> sz;
     tree->SetSize(sz);
     return tree;
   }
@@ -168,16 +167,10 @@ class SplayTree : public BinarySearchTree<DataType> {
  private:
   static void SerializeNode(BinaryTreeNode<DataType>* node, std::ostream& os) {
     bool has = (node != nullptr);
-    os.write(reinterpret_cast<const char*>(&has), sizeof(has));
+    os << has << " ";
     if (!has) return;
 
-    if constexpr (std::is_same<DataType, std::string>::value) {
-      size_t len = node->data.size();
-      os.write(reinterpret_cast<const char*>(&len), sizeof(len));
-      os.write(node->data.data(), len);
-    } else {
-      os.write(reinterpret_cast<const char*>(&node->data), sizeof(DataType));
-    }
+    os << node->data << " ";
 
     SerializeNode(node->left_child, os);
     SerializeNode(node->right_child, os);
@@ -185,19 +178,11 @@ class SplayTree : public BinarySearchTree<DataType> {
 
   static BinaryTreeNode<DataType>* DeserializeNode(std::istream& is) {
     bool has = false;
-    is.read(reinterpret_cast<char*>(&has), sizeof(has));
+    is >> has;
     if (!has) return nullptr;
 
     DataType data;
-    if constexpr (std::is_same<DataType, std::string>::value) {
-      size_t len;
-      is.read(reinterpret_cast<char*>(&len), sizeof(len));
-      std::string str(len, '\0');
-      is.read(&str[0], len);
-      data = str;
-    } else {
-      is.read(reinterpret_cast<char*>(&data), sizeof(DataType));
-    }
+    is >> data;
 
     auto* node = new BinaryTreeNode<DataType>(data);
     node->left_child = DeserializeNode(is);
