@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "simple_stl/container/binary_search_tree/binary_search_tree.h"
 #include "simple_stl/container/binary_tree/binary_tree_node_utils.h"
 
@@ -19,6 +21,9 @@ class SplayTree : public BinarySearchTree<DataType> {
  public:
   SplayTree() {}
   ~SplayTree() {}
+
+  using BinarySearchTree<DataType>::SetRoot;
+  using BinaryTree<DataType>::SetSize;
 
   // time complexity:O(h)
   BinaryTreeNode<DataType>* Search(const DataType& search_elem) {
@@ -127,7 +132,71 @@ class SplayTree : public BinarySearchTree<DataType> {
     return new_root;
   }
 
+  // serialize the tree to output stream
+  void Serialize(std::ostream& os) const {
+    SerializeNode(this->Root(), os);
+    int sz = this->Size();
+    os.write(reinterpret_cast<const char*>(&sz), sizeof(sz));
+  }
+
+  // deserialize the tree from input stream
+  static std::unique_ptr<SplayTree<DataType>> Deserialize(std::istream& is) {
+    auto tree = std::make_unique<SplayTree<DataType>>();
+    auto* root = DeserializeNode(is);
+    tree->SetRoot(root);
+    int sz;
+    is.read(reinterpret_cast<char*>(&sz), sizeof(sz));
+    tree->SetSize(sz);
+    return tree;
+  }
+
+  void create(std::istream& is) {
+    // 1) 删除当前所有节点
+    if (this->Root()) {
+      // BinaryTree::Remove 会递归删除以 Root() 为根的所有节点
+      this->Reset();
+    }
+
+    // 2) 反序列化到一个临时树
+    auto temp = Deserialize(is);
+
+    // 3) “偷过来”根节点指针和树大小
+    this->SetRoot(temp->Root());
+    this->SetSize(temp->Size());
+
+    // 4) 防止 temp 析构时把这些节点重复删掉
+    temp->SetRoot(nullptr);
+    temp->SetSize(0);
+  }
+
  private:
+  static void SerializeNode(BinaryTreeNode<DataType>* node, std::ostream& os) {
+    bool has = (node != nullptr);
+    os.write(reinterpret_cast<const char*>(&has), sizeof(has));
+    if (!has) return;
+    // 写节点数据
+    os.write(reinterpret_cast<const char*>(&node->data), sizeof(DataType));
+    // 递归
+    SerializeNode(node->left_child, os);
+    SerializeNode(node->right_child, os);
+  }
+
+  // 递归读节点
+  static BinaryTreeNode<DataType>* DeserializeNode(std::istream& is) {
+    bool has = false;
+    is.read(reinterpret_cast<char*>(&has), sizeof(has));
+    if (!has) return nullptr;
+    DataType data;
+    is.read(reinterpret_cast<char*>(&data), sizeof(DataType));
+    auto* node = new BinaryTreeNode<DataType>(data);
+    node->left_child = DeserializeNode(is);
+    if (node->left_child) node->left_child->parent = node;
+    node->right_child = DeserializeNode(is);
+    if (node->right_child) node->right_child->parent = node;
+    BinaryTreeNodeUtils::UpdateHeight(node);
+    return node;
+  }
+
   static BinaryTreeNode<DataType>* Splay(BinaryTreeNode<DataType>* now_node) {
     BinaryTreeNode<DataType>* son_node = now_node;
     while (son_node && son_node->parent && son_node->parent->parent) {

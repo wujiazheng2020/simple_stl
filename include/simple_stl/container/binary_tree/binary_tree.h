@@ -108,6 +108,14 @@ class BinaryTree {
     return delete_size;
   }
 
+  void Reset() {
+    if (root_) {
+      RemoveAt(root_);
+      size_ = 0;
+      root_ = nullptr;
+    }
+  }
+
  protected:
   void SetSize(const int& new_size) { size_ = new_size; }
 
