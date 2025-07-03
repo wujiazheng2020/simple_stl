@@ -145,7 +145,7 @@ TEST(TEST_SPLAY_TREE, TEST_SPLAY_TREE_BASIC) {
     std::ifstream ifs2("splay_tree_test.spm", std::ios::binary);
     ASSERT_TRUE(ifs2.is_open());
     sstl::SplayTree<int> tree_create;
-    tree_create.create(ifs2);
+    tree_create.Create(ifs2);
     EXPECT_EQ(tree_create.Size(), splay_tree2.Size());
 
     std::vector<int> seq_created;
@@ -154,5 +154,40 @@ TEST(TEST_SPLAY_TREE, TEST_SPLAY_TREE_BASIC) {
   }
 
   // 4) 清理测试文件
+  std::remove("splay_tree_test.spm");
+
+  {
+    sstl::SplayTree<std::string> splay_tree3;
+    for (int i = 0; i < 200; ++i) {
+      splay_tree3.Insert(std::to_string(
+          floor(1e5 * std::sin(i * 123 - 59 * i * i + 20 * i * i * i))));
+    }
+    EXPECT_EQ(splay_tree3.Size(), 200);
+    for (int i = 0; i < 180; ++i) {
+      splay_tree3.Remove(std::to_string(
+          floor(1e5 * std::sin(i * 123 - 59 * i * i + 20 * i * i * i))));
+    }
+    EXPECT_EQ(splay_tree2.Size(), 20);
+
+    std::ofstream ofs_now3("splay_tree_test.spm", std::ios::binary);
+    splay_tree3.Serialize(ofs_now3);
+    ofs_now3.close();
+
+    std::vector<std::string> seq_orig3;
+    inorder_collect(splay_tree3.Root(), seq_orig3);
+
+    {
+      std::ifstream ifs3("splay_tree_test.spm", std::ios::binary);
+      ASSERT_TRUE(ifs3.is_open());
+      auto tree_deser = sstl::SplayTree<std::string>::Deserialize(ifs3);
+      EXPECT_EQ(tree_deser->Size(), splay_tree3.Size());
+
+      // 验证节点和结构完全一致
+      std::vector<std::string> seq_loaded3;
+      inorder_collect(tree_deser->Root(), seq_loaded3);
+      EXPECT_EQ(seq_loaded3, seq_orig3);
+    }
+    std::cout << "splay_tree test passed." << std::endl;
+  }
   std::remove("splay_tree_test.spm");
 }
